@@ -2,6 +2,7 @@ package pairmatching.enums;
 
 public enum ErrorMessage {
 
+    FILE_INVALID("파일이 존재하지 않거나 유효하지 않습니다."),
     INPUT_CHOICE_FUNCTION_INVALID("기능 입력의 형식이 올바르지 않습니다."),
     INPUT_PAIR_MATCHING_CHOICE_INVALID("페어 매칭 선택 입력 형식이 올바르지 않습니다."),
     INPUT_ANSWER_INVALID("사용자의 응답이 올바르지 않습니다."),
