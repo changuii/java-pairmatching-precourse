@@ -9,6 +9,11 @@ public class OutputView {
         print(OutputMessage.CHOICE_FUNCTION_INTRODUCE);
     }
 
+
+    public void printErrorMessage(final IllegalArgumentException customException) {
+        print(customException.getMessage());
+    }
+
     private void print(final Object message, final Object... values) {
         System.out.println(formatMessage(message.toString(), values));
     }
