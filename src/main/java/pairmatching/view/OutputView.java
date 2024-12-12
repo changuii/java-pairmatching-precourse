@@ -15,6 +15,10 @@ public class OutputView {
         print(OutputMessage.ANSWER_INTRODUCE);
     }
 
+    public void printPairMatchingReset() {
+        print(OutputMessage.PAIR_MATCHING_RESET);
+    }
+
     public void printErrorMessage(final IllegalArgumentException customException) {
         print(customException.getMessage());
     }
