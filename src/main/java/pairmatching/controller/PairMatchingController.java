@@ -1,5 +1,9 @@
 package pairmatching.controller;
 
+import java.util.Collections;
+import java.util.List;
+import pairmatching.component.CrewGenerator;
+import pairmatching.domain.Crew;
 import pairmatching.handler.RetryHandler;
 import pairmatching.view.InputView;
 import pairmatching.view.OutputView;
@@ -13,12 +17,16 @@ public class PairMatchingController {
     private final InputView inputView;
     private final OutputView outputView;
     private final RetryHandler retryHandler;
+    private final List<Crew> backendCrews;
+    private final List<Crew> frontendCrews;
 
     public PairMatchingController(final InputView inputView, final OutputView outputView,
-                                  final RetryHandler retryHandler) {
+                                  final RetryHandler retryHandler, final CrewGenerator crewGenerator) {
         this.inputView = inputView;
         this.outputView = outputView;
         this.retryHandler = retryHandler;
+        this.backendCrews = Collections.unmodifiableList(crewGenerator.generateBackEndCrew());
+        this.frontendCrews = Collections.unmodifiableList(crewGenerator.generateFrontEndCrew());
     }
 
     public void run() {

@@ -3,7 +3,7 @@
 ### 입력
 
 - [x]  `src/main/resources/backend-crew.md`과 `src/main/resources/frontend-crew.md` 파일을 읽어와라
-  - [ ]  내용을 통해 크루원들의 데이터를 생성하라
+  - [x]  내용을 통해 크루원들의 데이터를 생성하라
 - [x]  사용자에게 기능을 입력받아라
 
 ```
