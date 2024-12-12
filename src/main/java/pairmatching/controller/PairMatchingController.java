@@ -30,12 +30,24 @@ public class PairMatchingController {
         String userChoice = retryHandler.retryUntilNotException(inputView::readChoiceFunction,
                 outputView::printErrorMessage);
         if (PAIR_MATCHING_FUNCTION.equals(userChoice)) {
-
+            pairMatching();
         } else if (PAIR_MATCHING_QUERY.equals(userChoice)) {
-
+            pairMatchingQuery();
         } else if (PAIR_MATCHING_RESET.equals(userChoice)) {
-
+            pairMatchingReset();
         }
         return QUIT.equals(userChoice);
+    }
+
+    public void pairMatching() {
+        retryHandler.retryUntilNotException(inputView::readPairMatchingChoice, outputView::printErrorMessage);
+    }
+
+    public void pairMatchingQuery() {
+        retryHandler.retryUntilNotException(inputView::readPairMatchingChoice, outputView::printErrorMessage);
+    }
+
+    public void pairMatchingReset() {
+
     }
 }

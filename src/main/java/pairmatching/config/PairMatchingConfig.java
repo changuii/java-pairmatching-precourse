@@ -2,6 +2,7 @@ package pairmatching.config;
 
 import pairmatching.controller.PairMatchingController;
 import pairmatching.handler.RetryHandler;
+import pairmatching.view.InputParser;
 import pairmatching.view.InputValidator;
 import pairmatching.view.InputView;
 import pairmatching.view.OutputView;
@@ -12,6 +13,6 @@ public abstract class PairMatchingConfig {
     }
 
     private static InputView createInputView() {
-        return new InputView(new InputValidator());
+        return new InputView(new InputValidator(), new InputParser());
     }
 }

@@ -1,13 +1,15 @@
 package pairmatching.view;
 
 import camp.nextstep.edu.missionutils.Console;
+import pairmatching.dto.PairMatchingChoiceDto;
 
 public class InputView {
-
     private final InputValidator inputValidator;
+    private final InputParser inputParser;
 
-    public InputView(final InputValidator inputValidator) {
+    public InputView(final InputValidator inputValidator, final InputParser inputParser) {
         this.inputValidator = inputValidator;
+        this.inputParser = inputParser;
     }
 
     public String readChoiceFunction() {
@@ -15,4 +17,11 @@ public class InputView {
         inputValidator.validateChoiceFunction(input);
         return input;
     }
+
+    public PairMatchingChoiceDto readPairMatchingChoice() {
+        String input = Console.readLine();
+        inputValidator.validatePairMatchingChoiceText(input);
+        return inputParser.parsePairMatching(input);
+    }
+
 }
