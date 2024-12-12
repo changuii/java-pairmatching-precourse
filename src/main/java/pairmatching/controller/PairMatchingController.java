@@ -94,6 +94,7 @@ public class PairMatchingController {
     }
 
     public void pairMatchingReset() {
-
+        pairMatchMachine.deleteAllMatchingHistory();
+        outputView.printPairMatchingReset();
     }
 }

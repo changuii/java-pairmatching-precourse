@@ -19,8 +19,10 @@ public class OutputView {
     }
 
     public void printPairMatchingQuery(final List<PairDto> pairDtos) {
+        printLineBreak();
         print(OutputMessage.PAIR_MATCHING_QUERY);
         pairDtos.forEach(this::printPairDto);
+        printLineBreak();
     }
 
     private void printPairDto(final PairDto pairDto) {
@@ -29,11 +31,16 @@ public class OutputView {
     }
 
     public void printPairMatchingReset() {
+        printLineBreak();
         print(OutputMessage.PAIR_MATCHING_RESET);
     }
 
     public void printErrorMessage(final IllegalArgumentException customException) {
         print(customException.getMessage());
+    }
+
+    private void printLineBreak() {
+        System.out.print(System.lineSeparator());
     }
 
     private void print(final Object message, final Object... values) {

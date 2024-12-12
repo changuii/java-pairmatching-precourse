@@ -63,6 +63,10 @@ public class PairMatchMachine {
         matchingHistories.remove(matchingHistory);
     }
 
+    public void deleteAllMatchingHistory() {
+        matchingHistories.clear();
+    }
+
     private List<MatchingHistory> findMatchingHistory(final Level level) {
         return matchingHistories.stream()
                 .filter(matchingHistory -> matchingHistory.matchBy(level))
