@@ -1,11 +1,15 @@
 package pairmatching.domain;
 
+import static pairmatching.handler.ExceptionHandler.handleException;
+import static pairmatching.handler.ExceptionHandler.handleExceptionSupplier;
+
 import camp.nextstep.edu.missionutils.Randoms;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import pairmatching.enums.Course;
 import pairmatching.enums.ErrorMessage;
 import pairmatching.enums.Level;
@@ -28,15 +32,11 @@ public class PairMatchMachine {
     }
 
     public MatchingHistory matchingPair(final Course course, final Level level, final Mission mission) {
-        int tryCount = 0;
-        while (tryCount++ < TRY_COUNT_MAX) {
-            MatchingHistory matchingHistory = makeMatching(getCrewsByCourse(course), course, level, mission);
-            if (!isDuplicationBySameLevel(matchingHistory, level)) {
-                matchingHistories.add(matchingHistory);
-                return matchingHistory;
-            }
-        }
-        throw new IllegalArgumentException(ErrorMessage.MATCHING_IMPOSSIBLE.getMessage());
+        return IntStream.range(0, TRY_COUNT_MAX)
+                .mapToObj(i -> makeMatching(course, level, mission))
+                .filter(history -> isValidMatching(history, level))
+                .findFirst()
+                .orElseThrow(() -> handleExceptionSupplier(ErrorMessage.MATCHING_IMPOSSIBLE));
     }
 
     public List<Crew> getCrewsByCourse(final Course course) {
@@ -55,7 +55,7 @@ public class PairMatchMachine {
         return matchingHistories.stream()
                 .filter(matchingHistory -> matchingHistory.matchBy(course, level, mission))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.MATCHING_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> handleExceptionSupplier(ErrorMessage.MATCHING_NOT_FOUND));
     }
 
     public void deleteMatchingHistoryBy(final Course course, final Level level, final Mission mission) {
@@ -73,15 +73,15 @@ public class PairMatchMachine {
                 .collect(Collectors.toList());
     }
 
-    private boolean isDuplicationBySameLevel(final MatchingHistory matchingResult, final Level level) {
+    private boolean isValidMatching(final MatchingHistory matchingResult, final Level level) {
         List<MatchingHistory> sameLevelHistory = findMatchingHistory(level);
         return sameLevelHistory.stream()
                 .anyMatch(history -> history.isDuplicatePair(matchingResult));
     }
 
-    private MatchingHistory makeMatching(final List<Crew> crews, final Course course, final Level level,
-                                         final Mission mission) {
-        return MatchingHistory.of(course, level, mission, makePairs(suffleCrews(crews)));
+    private MatchingHistory makeMatching(final Course course, final Level level, final Mission mission) {
+        List<Crew> crews = getCrewsByCourse(course);
+        return MatchingHistory.of(course, level, mission, makePairs(shuffleCrews(crews)));
     }
 
     private List<Pair> makePairs(final List<Crew> crews) {
@@ -100,7 +100,7 @@ public class PairMatchMachine {
         return Pair.of(crews.poll(), crews.poll());
     }
 
-    private List<Crew> suffleCrews(List<Crew> crews) {
+    private List<Crew> shuffleCrews(List<Crew> crews) {
         return Randoms.shuffle(crews);
     }
 }
