@@ -24,4 +24,10 @@ public class InputView {
         return inputParser.parsePairMatching(input);
     }
 
+    public boolean readAnswer() {
+        String input = Console.readLine();
+        inputValidator.validateAnswerText(input);
+        return inputParser.parseAnser(input);
+    }
+
 }
