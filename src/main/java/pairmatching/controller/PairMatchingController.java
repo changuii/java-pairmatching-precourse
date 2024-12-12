@@ -40,10 +40,12 @@ public class PairMatchingController {
     }
 
     public void pairMatching() {
+        outputView.printPairMatchingIntroduce();
         retryHandler.retryUntilNotException(inputView::readPairMatchingChoice, outputView::printErrorMessage);
     }
 
     public void pairMatchingQuery() {
+        outputView.printPairMatchingIntroduce();
         retryHandler.retryUntilNotException(inputView::readPairMatchingChoice, outputView::printErrorMessage);
     }
 

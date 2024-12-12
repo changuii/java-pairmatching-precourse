@@ -3,12 +3,13 @@ package pairmatching.view;
 import pairmatching.enums.OutputMessage;
 
 public class OutputView {
-
-
     public void printChoiceFunctionIntroduce() {
         print(OutputMessage.CHOICE_FUNCTION_INTRODUCE);
     }
 
+    public void printPairMatchingIntroduce() {
+        print(OutputMessage.PAIR_MATCHING_INTRODUCE);
+    }
 
     public void printErrorMessage(final IllegalArgumentException customException) {
         print(customException.getMessage());
