@@ -24,10 +24,6 @@ public class MatchingHistory {
         return new MatchingHistory(course, level, mission, pairs);
     }
 
-    public void recordPair(final Pair pair) {
-        this.pairs.add(pair);
-    }
-
     public boolean matchBy(final Course course, final Level level, final Mission mission) {
         return this.course == course && this.level == level && this.mission == mission;
     }
@@ -46,4 +42,7 @@ public class MatchingHistory {
                 .anyMatch(pair -> pair.isMatch(target));
     }
 
+    public List<Pair> getPairs() {
+        return pairs;
+    }
 }

@@ -1,12 +1,13 @@
 package pairmatching.controller;
 
-import java.util.Collections;
 import java.util.List;
 import pairmatching.component.CrewGenerator;
-import pairmatching.domain.Crew;
+import pairmatching.component.DtoConverter;
 import pairmatching.domain.MatchingHistory;
 import pairmatching.domain.PairMatchMachine;
+import pairmatching.dto.PairDto;
 import pairmatching.dto.PairMatchingChoiceDto;
+import pairmatching.enums.ErrorMessage;
 import pairmatching.handler.RetryHandler;
 import pairmatching.view.InputView;
 import pairmatching.view.OutputView;
@@ -21,18 +22,21 @@ public class PairMatchingController {
     private final OutputView outputView;
     private final RetryHandler retryHandler;
     private final PairMatchMachine pairMatchMachine;
+    private final DtoConverter dtoConverter;
 
     public PairMatchingController(final InputView inputView, final OutputView outputView,
-                                  final RetryHandler retryHandler, final CrewGenerator crewGenerator) {
+                                  final RetryHandler retryHandler, final CrewGenerator crewGenerator,
+                                  final DtoConverter dtoConverter) {
         this.inputView = inputView;
         this.outputView = outputView;
         this.retryHandler = retryHandler;
         this.pairMatchMachine = PairMatchMachine.of(crewGenerator.generateBackEndCrew(),
                 crewGenerator.generateFrontEndCrew());
+        this.dtoConverter = dtoConverter;
     }
 
     public void run() {
-        retryHandler.retryUntilTrue(this::choiceFunction);
+        retryHandler.retryUntilNotExceptionAndTrue(this::choiceFunction, outputView::printErrorMessage);
     }
 
     private boolean choiceFunction() {
@@ -78,6 +82,15 @@ public class PairMatchingController {
         outputView.printPairMatchingIntroduce();
         PairMatchingChoiceDto pairMatchingChoiceDto =
                 retryHandler.retryUntilNotException(inputView::readPairMatchingChoice, outputView::printErrorMessage);
+        if (pairMatchMachine.isExistsMatchingHistory(pairMatchingChoiceDto.getCourse(),
+                pairMatchingChoiceDto.getLevel(), pairMatchingChoiceDto.getMission())) {
+            MatchingHistory matchingHistory = pairMatchMachine.findMatchingHistory(pairMatchingChoiceDto.getCourse(),
+                    pairMatchingChoiceDto.getLevel(), pairMatchingChoiceDto.getMission());
+            List<PairDto> pairDtos = dtoConverter.convertPairDtos(matchingHistory.getPairs());
+            outputView.printPairMatchingQuery(pairDtos);
+            return;
+        }
+        throw new IllegalArgumentException(ErrorMessage.MATCHING_NOT_FOUND.getMessage());
     }
 
     public void pairMatchingReset() {

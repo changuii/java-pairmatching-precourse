@@ -2,6 +2,7 @@ package pairmatching.domain;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Pair {
     private static final int PAIR_COUNT_MIN = 2;
@@ -34,4 +35,9 @@ public class Pair {
                 .anyMatch(crew -> crew.isMatch(target));
     }
 
+    public List<String> getPairCrewNames() {
+        return pairCrew.stream()
+                .map(Crew::getName)
+                .collect(Collectors.toList());
+    }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
 import pairmatching.enums.Course;
+import pairmatching.enums.ErrorMessage;
 import pairmatching.enums.Level;
 import pairmatching.enums.Mission;
 
@@ -35,7 +36,7 @@ public class PairMatchMachine {
                 return matchingHistory;
             }
         }
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException(ErrorMessage.MATCHING_IMPOSSIBLE.getMessage());
     }
 
     public List<Crew> getCrewsByCourse(final Course course) {
@@ -54,7 +55,7 @@ public class PairMatchMachine {
         return matchingHistories.stream()
                 .filter(matchingHistory -> matchingHistory.matchBy(course, level, mission))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.MATCHING_NOT_FOUND.getMessage()));
     }
 
     public void deleteMatchingHistoryBy(final Course course, final Level level, final Mission mission) {

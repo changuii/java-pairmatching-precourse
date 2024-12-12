@@ -18,4 +18,8 @@ public class Crew {
     public boolean isMatch(final Crew crew) {
         return this.name.equals(crew.name);
     }
+
+    public String getName() {
+        return name;
+    }
 }

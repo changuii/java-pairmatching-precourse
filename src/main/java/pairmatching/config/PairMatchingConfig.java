@@ -1,6 +1,7 @@
 package pairmatching.config;
 
 import pairmatching.component.CrewGenerator;
+import pairmatching.component.DtoConverter;
 import pairmatching.component.MarkdownFileParser;
 import pairmatching.controller.PairMatchingController;
 import pairmatching.handler.RetryHandler;
@@ -12,7 +13,7 @@ import pairmatching.view.OutputView;
 public abstract class PairMatchingConfig {
     public static PairMatchingController createController() {
         return new PairMatchingController(createInputView(), new OutputView(), new RetryHandler(),
-                createCrewGenerator());
+                createCrewGenerator(), new DtoConverter());
     }
 
     private static InputView createInputView() {

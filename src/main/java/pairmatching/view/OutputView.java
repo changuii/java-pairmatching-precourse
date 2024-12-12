@@ -1,5 +1,8 @@
 package pairmatching.view;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import pairmatching.dto.PairDto;
 import pairmatching.enums.OutputMessage;
 
 public class OutputView {
@@ -13,6 +16,16 @@ public class OutputView {
 
     public void printAnswerIntroduce() {
         print(OutputMessage.ANSWER_INTRODUCE);
+    }
+
+    public void printPairMatchingQuery(final List<PairDto> pairDtos) {
+        print(OutputMessage.PAIR_MATCHING_QUERY);
+        pairDtos.forEach(this::printPairDto);
+    }
+
+    private void printPairDto(final PairDto pairDto) {
+        print(pairDto.getCrews().stream()
+                .collect(Collectors.joining(OutputMessage.PAIR_MATCHING_DELIMITER.toString())));
     }
 
     public void printPairMatchingReset() {

@@ -20,4 +20,17 @@ public class RetryHandler {
             }
         }
     }
+
+    public void retryUntilNotExceptionAndTrue(final BooleanSupplier logic,
+                                              final Consumer<IllegalArgumentException> exceptionCallback) {
+        while (true) {
+            try {
+                if (logic.getAsBoolean()) {
+                    break;
+                }
+            } catch (IllegalArgumentException e) {
+                exceptionCallback.accept(e);
+            }
+        }
+    }
 }
