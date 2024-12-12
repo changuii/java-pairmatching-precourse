@@ -1,6 +1,6 @@
 package pairmatching.view;
 
-import pairmatching.dto.PairMatchingChoiceDto;
+import pairmatching.dto.ChoiceDto;
 import pairmatching.enums.Course;
 import pairmatching.enums.ErrorMessage;
 import pairmatching.enums.Level;
@@ -11,9 +11,9 @@ public class InputParser {
     private static final String USER_ANSWER_YES = "네";
     private static final String USER_ANSWER_NO = "아니오";
 
-    public PairMatchingChoiceDto parsePairMatching(final String pairMatchingText) {
+    public ChoiceDto parsePairMatching(final String pairMatchingText) {
         String[] values = pairMatchingText.split(PAIR_MATCHING_DELIMITER);
-        return PairMatchingChoiceDto.of(
+        return ChoiceDto.of(
                 parseCourse(values[0]),
                 parseLevel(values[1]),
                 parseMission(values[2], parseLevel(values[1]))

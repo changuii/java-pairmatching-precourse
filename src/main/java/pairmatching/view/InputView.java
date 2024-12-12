@@ -1,7 +1,7 @@
 package pairmatching.view;
 
 import camp.nextstep.edu.missionutils.Console;
-import pairmatching.dto.PairMatchingChoiceDto;
+import pairmatching.dto.ChoiceDto;
 
 public class InputView {
     private final InputValidator inputValidator;
@@ -18,7 +18,7 @@ public class InputView {
         return input;
     }
 
-    public PairMatchingChoiceDto readPairMatchingChoice() {
+    public ChoiceDto readPairMatchingChoice() {
         String input = Console.readLine();
         inputValidator.validatePairMatchingChoiceText(input);
         return inputParser.parsePairMatching(input);

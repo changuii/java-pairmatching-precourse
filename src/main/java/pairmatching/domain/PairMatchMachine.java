@@ -31,12 +31,14 @@ public class PairMatchMachine {
         return new PairMatchMachine(backendCrews, frontendCrews);
     }
 
-    public MatchingHistory matchingPair(final Course course, final Level level, final Mission mission) {
-        return IntStream.range(0, TRY_COUNT_MAX)
+    public void matchingPair(final Course course, final Level level, final Mission mission) {
+        MatchingHistory matching = IntStream.range(0, TRY_COUNT_MAX)
                 .mapToObj(i -> makeMatching(course, level, mission))
                 .filter(history -> isValidMatching(history, level))
                 .findFirst()
                 .orElseThrow(() -> handleExceptionSupplier(ErrorMessage.MATCHING_IMPOSSIBLE));
+
+        matchingHistories.add(matching);
     }
 
     public List<Crew> getCrewsByCourse(final Course course) {
@@ -46,7 +48,7 @@ public class PairMatchMachine {
         return frontendCrews;
     }
 
-    public boolean isExistsMatchingHistory(final Course course, final Level level, final Mission mission) {
+    public boolean existsMatchingHistory(final Course course, final Level level, final Mission mission) {
         return matchingHistories.stream()
                 .anyMatch(matchingHistory -> matchingHistory.matchBy(course, level, mission));
     }
@@ -75,7 +77,7 @@ public class PairMatchMachine {
 
     private boolean isValidMatching(final MatchingHistory matchingResult, final Level level) {
         List<MatchingHistory> sameLevelHistory = findMatchingHistory(level);
-        return sameLevelHistory.stream()
+        return !sameLevelHistory.stream()
                 .anyMatch(history -> history.isDuplicatePair(matchingResult));
     }
 
