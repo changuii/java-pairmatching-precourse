@@ -6,7 +6,8 @@ public enum ErrorMessage {
     INPUT_PAIR_MATCHING_CHOICE_INVALID("페어 매칭 선택 입력 형식이 올바르지 않습니다."),
     INPUT_ANSWER_INVALID("사용자의 응답이 올바르지 않습니다."),
     COURSE_NOT_FOUND("코스가 존재하지 않습니다."),
-    LEVEL_NOT_FOUND("레벨이 존재하지 않습니다.");
+    LEVEL_NOT_FOUND("레벨이 존재하지 않습니다."),
+    MISSION_NOT_FOUND("미션이 존재하지 않습니다.");
 
     private static final String ERROR_PREFIX = "[ERROR] ";
     private final String message;

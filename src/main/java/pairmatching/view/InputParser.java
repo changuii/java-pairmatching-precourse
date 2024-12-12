@@ -4,6 +4,7 @@ import pairmatching.dto.PairMatchingChoiceDto;
 import pairmatching.enums.Course;
 import pairmatching.enums.ErrorMessage;
 import pairmatching.enums.Level;
+import pairmatching.enums.Mission;
 
 public class InputParser {
     private static final String PAIR_MATCHING_DELIMITER = ", ";
@@ -12,7 +13,11 @@ public class InputParser {
 
     public PairMatchingChoiceDto parsePairMatching(final String pairMatchingText) {
         String[] values = pairMatchingText.split(PAIR_MATCHING_DELIMITER);
-        return PairMatchingChoiceDto.of(parseCourse(values[0]), parseLevel(values[1]), values[2]);
+        return PairMatchingChoiceDto.of(
+                parseCourse(values[0]),
+                parseLevel(values[1]),
+                parseMission(values[2], parseLevel(values[1]))
+        );
     }
 
     private Course parseCourse(final String courseText) {
@@ -21,6 +26,10 @@ public class InputParser {
 
     private Level parseLevel(final String levelText) {
         return Level.matchLevel(levelText);
+    }
+
+    private Mission parseMission(final String missionText, Level level) {
+        return Mission.matchMission(missionText, level);
     }
 
     public boolean parseAnser(final String answerText) {
