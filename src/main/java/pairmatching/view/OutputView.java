@@ -11,6 +11,10 @@ public class OutputView {
         print(OutputMessage.PAIR_MATCHING_INTRODUCE);
     }
 
+    public void printAnswerIntroduce() {
+        print(OutputMessage.ANSWER_INTRODUCE);
+    }
+
     public void printErrorMessage(final IllegalArgumentException customException) {
         print(customException.getMessage());
     }
