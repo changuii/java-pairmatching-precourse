@@ -14,4 +14,8 @@ public class Crew {
     public static Crew of(final Course course, final String name) {
         return new Crew(course, name);
     }
+
+    public boolean isMatch(final Crew crew) {
+        return this.name.equals(crew.name);
+    }
 }

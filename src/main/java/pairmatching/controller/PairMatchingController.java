@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.List;
 import pairmatching.component.CrewGenerator;
 import pairmatching.domain.Crew;
+import pairmatching.domain.MatchingHistory;
+import pairmatching.domain.PairMatchMachine;
+import pairmatching.dto.PairMatchingChoiceDto;
 import pairmatching.handler.RetryHandler;
 import pairmatching.view.InputView;
 import pairmatching.view.OutputView;
@@ -17,16 +20,15 @@ public class PairMatchingController {
     private final InputView inputView;
     private final OutputView outputView;
     private final RetryHandler retryHandler;
-    private final List<Crew> backendCrews;
-    private final List<Crew> frontendCrews;
+    private final PairMatchMachine pairMatchMachine;
 
     public PairMatchingController(final InputView inputView, final OutputView outputView,
                                   final RetryHandler retryHandler, final CrewGenerator crewGenerator) {
         this.inputView = inputView;
         this.outputView = outputView;
         this.retryHandler = retryHandler;
-        this.backendCrews = Collections.unmodifiableList(crewGenerator.generateBackEndCrew());
-        this.frontendCrews = Collections.unmodifiableList(crewGenerator.generateFrontEndCrew());
+        this.pairMatchMachine = PairMatchMachine.of(crewGenerator.generateBackEndCrew(),
+                crewGenerator.generateFrontEndCrew());
     }
 
     public void run() {
@@ -38,7 +40,7 @@ public class PairMatchingController {
         String userChoice = retryHandler.retryUntilNotException(inputView::readChoiceFunction,
                 outputView::printErrorMessage);
         if (PAIR_MATCHING_FUNCTION.equals(userChoice)) {
-            pairMatching();
+            retryHandler.retryUntilTrue(this::pairMatching);
         } else if (PAIR_MATCHING_QUERY.equals(userChoice)) {
             pairMatchingQuery();
         } else if (PAIR_MATCHING_RESET.equals(userChoice)) {
@@ -47,14 +49,35 @@ public class PairMatchingController {
         return QUIT.equals(userChoice);
     }
 
-    public void pairMatching() {
+    private boolean pairMatching() {
         outputView.printPairMatchingIntroduce();
-        retryHandler.retryUntilNotException(inputView::readPairMatchingChoice, outputView::printErrorMessage);
+        PairMatchingChoiceDto choiceDto =
+                retryHandler.retryUntilNotException(inputView::readPairMatchingChoice, outputView::printErrorMessage);
+        if (pairMatchMachine
+                .isExistsMatchingHistory(choiceDto.getCourse(), choiceDto.getLevel(), choiceDto.getMission())) {
+            return retryPairMatching(choiceDto);
+        }
+        pairMatchMachine.matchingPair(choiceDto.getCourse(), choiceDto.getLevel(), choiceDto.getMission());
+        return true;
     }
 
-    public void pairMatchingQuery() {
+    private boolean retryPairMatching(final PairMatchingChoiceDto pairMatchingChoiceDto) {
+        outputView.printAnswerIntroduce();
+        boolean answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView::printErrorMessage);
+        if (answer) {
+            pairMatchMachine.matchingPair(pairMatchingChoiceDto.getCourse(), pairMatchingChoiceDto.getLevel(),
+                    pairMatchingChoiceDto.getMission());
+            pairMatchMachine.deleteMatchingHistoryBy(pairMatchingChoiceDto.getCourse(),
+                    pairMatchingChoiceDto.getLevel(),
+                    pairMatchingChoiceDto.getMission());
+        }
+        return answer;
+    }
+
+    private void pairMatchingQuery() {
         outputView.printPairMatchingIntroduce();
-        retryHandler.retryUntilNotException(inputView::readPairMatchingChoice, outputView::printErrorMessage);
+        PairMatchingChoiceDto pairMatchingChoiceDto =
+                retryHandler.retryUntilNotException(inputView::readPairMatchingChoice, outputView::printErrorMessage);
     }
 
     public void pairMatchingReset() {

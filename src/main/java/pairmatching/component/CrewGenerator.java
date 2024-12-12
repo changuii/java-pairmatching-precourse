@@ -1,5 +1,6 @@
 package pairmatching.component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import pairmatching.domain.Crew;
@@ -15,15 +16,15 @@ public class CrewGenerator {
     }
 
     public List<Crew> generateBackEndCrew() {
-        return fileParser.parse(BACKEND_FILE_PATH).stream()
+        return Collections.unmodifiableList(fileParser.parse(BACKEND_FILE_PATH).stream()
                 .map(crewName -> parseCrew(Course.BACKEND, crewName))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     public List<Crew> generateFrontEndCrew() {
-        return fileParser.parse(FRONTEND_FILE_PATH).stream()
+        return Collections.unmodifiableList(fileParser.parse(FRONTEND_FILE_PATH).stream()
                 .map(crewName -> parseCrew(Course.FRONTEND, crewName))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     private Crew parseCrew(final Course course, final String crewName) {

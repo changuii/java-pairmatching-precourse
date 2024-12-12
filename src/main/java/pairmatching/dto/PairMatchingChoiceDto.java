@@ -18,4 +18,16 @@ public class PairMatchingChoiceDto {
     public static PairMatchingChoiceDto of(final Course course, final Level level, final Mission mission) {
         return new PairMatchingChoiceDto(course, level, mission);
     }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public Mission getMission() {
+        return mission;
+    }
 }
